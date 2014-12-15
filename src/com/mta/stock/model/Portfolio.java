@@ -40,11 +40,29 @@ public class Portfolio { //a portfolio of up to 5 stocks
 		private float currentbid;
 		private float currentask;
 		private Date date;
-		private int recommendation;
 		private int StockQuantity;
-		
+		private RECOMMENDATION recommend;
 		
 	}
+	private enum RECOMMENDATION {
+
+	    ONE(1),
+	    TWO(2);
+
+	    private final int value;
+
+	    private RECOMMENDATION(int value) {
+	        this.value = value;
+	    }
+
+	    public int getValue() {
+	        return this.value;
+	    }
+	}
+		
+		
+		
+	
 	public String getHtmlString(){ //prints the values in a portfolio
 		String str = "<h1>"+this.title+"</h1><table border=1>"
 				+ "<tr><td>symbol</td><td>ask</td><td>bid</td><td>date</td></tr>";
@@ -54,19 +72,18 @@ public class Portfolio { //a portfolio of up to 5 stocks
 		}
 		str = str.concat("</table>");
 		return str;
-		
 	}
-	public Portfolio PortCopy(Portfolio original){ //replicates a portfolio
-		Portfolio replica1=new Portfolio();
-		replica1.conStocks();
+	public Portfolio (Portfolio original){ //replicates a portfolio
+		
+		this.conStocks();
 		String strtool=new String(original.title);
-		replica1.title=strtool;
+		this.title=strtool;
 		int i;
 		for(i=0;i<original.portfolio_size;i++){
-			replica1.stocks[i]=new Stock();
-			replica1.addstock(original.stocks[i].stockcopy(original.stocks[i]));
+			this.stocks[i]=new Stock();
+			this.addstock(original.stocks[i].stockcopy(original.stocks[i]));
 		}
-		return replica1;
+		
 	}
 	public String getTitle() {
 		return title;
@@ -88,5 +105,8 @@ public class Portfolio { //a portfolio of up to 5 stocks
 	}
 	public void editBid(Portfolio handled,int stocknumber,float value){ //edits bid value for the desired stock
 		handled.stocks[stocknumber-1].setBid(value);
+	}
+	public void editDate(Portfolio handled,int stocknumber,Date value){ //edits bid value for the desired stock
+		handled.stocks[stocknumber-1].setDate(value);
 	}
 }

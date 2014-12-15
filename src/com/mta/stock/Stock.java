@@ -50,6 +50,9 @@ public class Stock { //signifies a stock and it's values for a certain date
 		Stock replica=new Stock();
 		replica.setAsk(original.getAsk());
 		replica.setBid(original.getBid());
+		Date date=new Date();
+		date=original.getDate();
+		replica.setDate(date);
 		replica.setDate(original.getDate());
 		replica.setSymbol(original.getSymbol());
 		return replica;
