@@ -8,6 +8,13 @@ public class Stock { //signifies a stock and it's values for a certain date
 	private float Bid;
 	private Date date;
 	
+	public Stock(String Symbol, float ask, float bid, Date date){
+		this.symbol=Symbol;
+		this.Ask=ask;
+		this.Bid=bid;
+		this.date=date;
+	}
+	
 	
 	
 	public String getSymbol(){
@@ -34,11 +41,7 @@ public class Stock { //signifies a stock and it's values for a certain date
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	
-	public Date getDate() {
-		return date;
-	}
-	public Date getterDate(){
+	public Date getDate(){
 		Date date=new Date(this.date.getDate());
 		return date;
 	}
@@ -53,9 +56,9 @@ public class Stock { //signifies a stock and it's values for a certain date
 	public Stock(Stock original){ //copies a given stock into a new identical instance
 		this.setAsk(original.getAsk());
 		this.setBid(original.getBid());
-		this.setDate(original.getterDate());
 		this.setDate(original.getDate());
 		this.setSymbol(original.getSymbol());
 	}
+	
 
 }

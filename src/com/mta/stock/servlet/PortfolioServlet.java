@@ -17,10 +17,8 @@ public class PortfolioServlet extends HttpServlet{ //initiates the program and p
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		PortfolioService portfolioService = new PortfolioService();
 		Portfolio portfolio = portfolioService.getPortfolio();
-		Portfolio portfolio2=new Portfolio(portfolio);
-		portfolio2.setTitle("portfolio#2");
-		resp.getWriter().print(portfolio.getHtmlString()+"<br>");
-		resp.getWriter().print(portfolio2.getHtmlString());
+		resp.getWriter().print(portfolio.getHtmlString());
+
 		
 		
 
