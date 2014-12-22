@@ -4,8 +4,6 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.mta.stock.Stock; 
 public class Portfolio { //a portfolio of up to 5 stocks
 	public String title;
 	private int portfolio_size;
@@ -19,7 +17,7 @@ public class Portfolio { //a portfolio of up to 5 stocks
 			this.stocks[this.portfolio_size]=stock;
 			this.StocksStatus[this.portfolio_size].currentask=stock.getAsk();
 			this.StocksStatus[this.portfolio_size].currentbid=stock.getBid();
-			this.StocksStatus[this.portfolio_size].date=stock.getterDate();
+			this.StocksStatus[this.portfolio_size].date=stock.getDate();
 			this.StocksStatus[this.portfolio_size].currentask=stock.getAsk();
 			this.portfolio_size++;
 			

@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.mta.stock.*;
 import com.mta.stock.model.Portfolio;
+import com.mta.stock.model.Stock;
 
 public class PortfolioService {
 	public Portfolio getPortfolio(){ //sets initial value for portfolio
