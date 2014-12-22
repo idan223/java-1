@@ -12,17 +12,28 @@ public class Portfolio { //a portfolio of up to 5 stocks
 	final private int MAX_PORTFOLIO_SIZE = 5;
 	private Stock[] stocks;
 	public StockStatus[] StocksStatus;
-	final public int DO_NOTHING=0;
-	final public int BUY=1;
-	final public int SELL=2;
+	float balance;
 	public void addstock(Stock stock){ //adds new stock to portfolio
-		stocks[this.portfolio_size]=stock;
-		this.portfolio_size++;
+		if (this.portfolio_size<this.MAX_PORTFOLIO_SIZE)
+		{
+			this.stocks[this.portfolio_size]=stock;
+			this.StocksStatus[this.portfolio_size].currentask=stock.getAsk();
+			this.StocksStatus[this.portfolio_size].currentbid=stock.getBid();
+			this.StocksStatus[this.portfolio_size].date=stock.getterDate();
+			this.StocksStatus[this.portfolio_size].currentask=stock.getAsk();
+			this.portfolio_size++;
+			
+		}
+		else
+		{
+			System.out.println();
+		}
 	}
 	public void conStocks(){ //constructor for portfolio
 		this.stocks=new Stock[MAX_PORTFOLIO_SIZE];
 		this.StocksStatus= new StockStatus[MAX_PORTFOLIO_SIZE];
 		this.portfolio_size=0;
+		this.balance=0;
 	}
 
 	public Stock[] getStocks() {
@@ -41,17 +52,18 @@ public class Portfolio { //a portfolio of up to 5 stocks
 		private float currentask;
 		private Date date;
 		private int StockQuantity;
-		private RECOMMENDATION recommend;
+		private ALGO_RECOMMENDATION recommend;
 		
 	}
-	private enum RECOMMENDATION {
+	private enum ALGO_RECOMMENDATION {
 
-	    ONE(1),
-	    TWO(2);
+	    DO_NOTHING(0),
+	    BUY(1),
+	    SELL(2);
 
 	    private final int value;
 
-	    private RECOMMENDATION(int value) {
+	    private ALGO_RECOMMENDATION(int value) {
 	        this.value = value;
 	    }
 
@@ -73,6 +85,11 @@ public class Portfolio { //a portfolio of up to 5 stocks
 		str = str.concat("</table>");
 		return str;
 	}
+	public Portfolio(){
+		this.conStocks();
+		this.title=new String();
+		
+	}
 	public Portfolio (Portfolio original){ //replicates a portfolio
 		
 		this.conStocks();
@@ -80,8 +97,7 @@ public class Portfolio { //a portfolio of up to 5 stocks
 		this.title=strtool;
 		int i;
 		for(i=0;i<original.portfolio_size;i++){
-			this.stocks[i]=new Stock();
-			this.addstock(original.stocks[i].stockcopy(original.stocks[i]));
+			this.stocks[i]=new Stock(original.stocks[i]);
 		}
 		
 	}
@@ -91,22 +107,30 @@ public class Portfolio { //a portfolio of up to 5 stocks
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public Portfolio removestock(Portfolio handled,int stocknumber){ //removes specified stock from specified portfolio
-		Portfolio newport=handled;
-		int i;
-		for (i=stocknumber;i<newport.portfolio_size;i++)
-		{
-			newport.stocks[i-1]=newport.stocks[i];
+	public void updateBalance(float change){
+		this.balance=this.balance+change;
+	}
+	public void removestock(String Symbol){ //removes specified stock from specified portfolio
+		Date date;
+		int stocknumber=-1,i;
+		for (i = 0; i < this.portfolio_size; i++) {
+			date=this.stocks[i].getDate();
+			if (date.equals(Symbol)){
+				stocknumber=i;
+			}
 			
 		}
-		newport.stocks[newport.portfolio_size]=null;
-		newport.portfolio_size--;
-		return newport;
-	}
-	public void editBid(Portfolio handled,int stocknumber,float value){ //edits bid value for the desired stock
-		handled.stocks[stocknumber-1].setBid(value);
-	}
-	public void editDate(Portfolio handled,int stocknumber,Date value){ //edits bid value for the desired stock
-		handled.stocks[stocknumber-1].setDate(value);
+		if (i>(-1)){
+			this.updateBalance(this.StocksStatus[i].currentbid*this.StocksStatus[i].StockQuantity);
+			if ((i+1)<this.portfolio_size){
+				for (int j = (i+1); j < StocksStatus.length; j++) {
+					this.stocks[j-1]=this.stocks[j];
+					this.StocksStatus[j-1]=this.StocksStatus[j];
+				}
+			}
+			this.stocks[this.portfolio_size-1]=null;
+			this.StocksStatus[this.portfolio_size-1]=null;
+			this.portfolio_size--;			
+		}
 	}
 }

@@ -38,6 +38,10 @@ public class Stock { //signifies a stock and it's values for a certain date
 	public Date getDate() {
 		return date;
 	}
+	public Date getterDate(){
+		Date date=new Date(this.date.getDate());
+		return date;
+	}
 	
 	public void setAsk(float ask) {
 		Ask = ask;
@@ -46,16 +50,12 @@ public class Stock { //signifies a stock and it's values for a certain date
 	public void setBid(float bid) {
 		Bid = bid;
 	}
-	public Stock stockcopy(Stock original){ //copies a given stock into a new identical instance
-		Stock replica=new Stock();
-		replica.setAsk(original.getAsk());
-		replica.setBid(original.getBid());
-		Date date=new Date();
-		date=original.getDate();
-		replica.setDate(date);
-		replica.setDate(original.getDate());
-		replica.setSymbol(original.getSymbol());
-		return replica;
+	public Stock(Stock original){ //copies a given stock into a new identical instance
+		this.setAsk(original.getAsk());
+		this.setBid(original.getBid());
+		this.setDate(original.getterDate());
+		this.setDate(original.getDate());
+		this.setSymbol(original.getSymbol());
 	}
 
 }
