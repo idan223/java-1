@@ -15,9 +15,9 @@ import com.mta.stock.service.PortfolioService;
 @SuppressWarnings("serial")
 public class PortfolioServlet extends HttpServlet{ //initiates the program and prints the output of the program in html code
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		PortfolioService portfolioService = new PortfolioService();
-		Portfolio portfolio = portfolioService.getPortfolio();
-		resp.getWriter().print(portfolio.getHtmlString());
+		PortfolioService portfolioService = new PortfolioService(); //creates portfolio
+		Portfolio portfolio = portfolioService.getPortfolio(); //fills portfolio and performs tasks on it
+		resp.getWriter().print(portfolio.getHtmlString()); //prints out the result in html coding.
 
 		
 		

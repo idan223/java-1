@@ -12,8 +12,8 @@ public class PortfolioService {
 		Portfolio myportfolio= new Portfolio(); 
 		myportfolio.conStocks();
 		myportfolio.title= "Exercise 7 portfolio";
-		myportfolio.updateBalance(10000);
-		
+		myportfolio.updateBalance(10000); //initial value
+		//add 3 stocks to portfolio
 		Date date=new Date(11,15,214);
 		Stock stock=new Stock("PIH",10,(float) 8.5,date);		
 		myportfolio.addstock(stock);
@@ -25,13 +25,13 @@ public class PortfolioService {
 		date=new Date(11,15,214);		
 		stock=new Stock("CAAS",20,(float) 15.5,date);		
 		myportfolio.addstock(stock);
-		
-		myportfolio.buystock("PIH", 20);
+		//buy stocks
+		myportfolio.buystock("PIH", 20); 
 		myportfolio.buystock("AAL", 30);
 		myportfolio.buystock("CAAS", 40);
 		
-		myportfolio.sellstock("AAL", -1);
-		myportfolio.removestock("CAAS");
+		myportfolio.sellstock("AAL", -1, false); //keep stock afterwards
+		myportfolio.removestock("CAAS"); //remove stock from portfolio
 		return myportfolio;
 	}
 
