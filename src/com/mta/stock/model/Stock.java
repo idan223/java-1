@@ -9,6 +9,10 @@ public class Stock { //signifies a stock and it's values for a certain date
 	private float Bid;
 	private Date date;
 	
+	public Stock(){
+		
+	}
+	
 	public Stock(String Symbol, float ask, float bid, Date date){   //constructor
 		this.symbol=Symbol;
 		this.Ask=ask;

@@ -5,25 +5,26 @@ import java.util.Date;
 
 import com.mta.stock.model.Portfolio;
 import com.mta.stock.model.Stock;
+import com.mta.stock.model.StockStatus;
 
 public class PortfolioService {
 	@SuppressWarnings("deprecation")
 	public Portfolio getPortfolio(){ //sets initial value for portfolio
 		Portfolio myportfolio= new Portfolio(); 
 		myportfolio.conStocks();
-		myportfolio.title= "Exercise 7 portfolio";
+		myportfolio.title= "Exercise 8 portfolio";
 		myportfolio.updateBalance(10000); //initial value
 		//add 3 stocks to portfolio
-		Date date=new Date(11,15,214);
-		Stock stock=new Stock("PIH",10,(float) 8.5,date);		
+		Date date=new Date(114,11,15);
+		StockStatus stock=new StockStatus("PIH",10,(float) 8.5,date);		
 		myportfolio.addstock(stock);
 				
-		date=new Date(11,15,214);		
-		stock=new Stock("AAL",30,(float) 25.5,date);		
+		date=new Date(114,11,15);		
+		stock=new StockStatus("AAL",30,(float) 25.5,date);		
 		myportfolio.addstock(stock);
 				
-		date=new Date(11,15,214);		
-		stock=new Stock("CAAS",20,(float) 15.5,date);		
+		date=new Date(114,11,15);		
+		stock=new StockStatus("CAAS",20,(float) 15.5,date);		
 		myportfolio.addstock(stock);
 		//buy stocks
 		myportfolio.buystock("PIH", 20); 
