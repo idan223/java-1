@@ -27,7 +27,9 @@ public class StockStatus extends Stock{
 	}
 	
 	
-	
+	public void setRecommend(ALGO_RECOMMENDATION recommend) {
+		this.recommend = recommend;
+	}
 	public int getStockQuantity() {
 		return StockQuantity;
 	}
@@ -56,7 +58,7 @@ public class StockStatus extends Stock{
 		this.init();
 	}
 	
-	public StockStatus(String Symbol, float ask, float bid, Date date){
+	public StockStatus(String Symbol, float ask, float bid, Date date){ //constructor
 		super(Symbol,ask,bid,date);
 		this.init();
 	}

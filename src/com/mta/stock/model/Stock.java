@@ -4,10 +4,10 @@ import java.util.Date;
 
 public class Stock { //signifies a stock and it's values for a certain date
 	//variables
-	private String symbol;
-	private float Ask;
-	private float Bid;
-	private Date date;
+	protected String symbol;
+	protected float Ask;
+	protected float Bid;
+	protected Date date;
 	
 	public Stock(){
 		
