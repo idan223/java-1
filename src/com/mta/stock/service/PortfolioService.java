@@ -3,13 +3,17 @@ package com.mta.stock.service;
 
 import java.util.Date;
 
+import com.mta.stock.exceptions.BalanceException;
+import com.mta.stock.exceptions.PortfolioFullException;
+import com.mta.stock.exceptions.StockAlreadyExistsException;
+import com.mta.stock.exceptions.StockNotExistException;
 import com.mta.stock.model.Portfolio;
 import com.mta.stock.model.Stock;
 import com.mta.stock.model.StockStatus;
 
 public class PortfolioService {
 	@SuppressWarnings("deprecation")
-	public Portfolio getPortfolio(){ //sets initial value for portfolio
+	public Portfolio getPortfolio() throws StockAlreadyExistsException, PortfolioFullException, BalanceException, StockNotExistException{ //sets initial value for portfolio
 		Portfolio myportfolio= new Portfolio(); 
 		myportfolio.conStocks();
 		myportfolio.title= "Exercise 8 portfolio";
@@ -26,14 +30,20 @@ public class PortfolioService {
 		date=new Date(114,11,15);		
 		stock=new StockStatus("CAAS",20,(float) 15.5,date);		
 		myportfolio.addstock(stock);
+		//running exception
+		stock=new StockStatus("CAAS",20,(float) 15.5,date);		
+		myportfolio.addstock(stock);
 		//buy stocks
 		myportfolio.buystock("PIH", 20); 
 		myportfolio.buystock("AAL", 30);
 		myportfolio.buystock("CAAS", 40);
 		
-		myportfolio.sellstock("AAL", -1, false); //keep stock afterwards
+		myportfolio.sellstock("AAL", -1); //keep stock afterwards
 		myportfolio.removestock("CAAS"); //remove stock from portfolio
 		return myportfolio;
+		
 	}
+
+	
 
 }

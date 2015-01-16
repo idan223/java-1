@@ -1,5 +1,7 @@
 package com.mta.stock.model;
 
+import com.mta.stock.exceptions.*;
+
 public class Portfolio { //a portfolio of up to 5 stocks
 	//variables
 	public String title; // name of portfolio
@@ -40,33 +42,58 @@ public class Portfolio { //a portfolio of up to 5 stocks
 	
 	
 	
-	public void addstock(StockStatus stock){ //adds new stock to portfolio
+	public void addstock(StockStatus stock) throws StockAlreadyExistsException, PortfolioFullException{ //adds new stock to portfolio
 		if (this.portfolio_size<this.MAX_PORTFOLIO_SIZE)
 		{
-			this.stocks[this.portfolio_size]=stock;
-			this.portfolio_size++;
-			
+			int stocknumber=-1;
+			for (int i = 0; i < this.portfolio_size; i++) { //finds if the stock is in the portfolio
+				String Symbol1=this.stocks[i].getSymbol();
+				if (Symbol1.equals(stock.getSymbol())){
+					stocknumber=i;
+				}
+				
+			}
+			if (stocknumber==-1) //stock wasn't found, can add it
+			{
+				this.stocks[this.portfolio_size]=stock;
+				this.portfolio_size++;
+			}
+			else
+			{
+				throw new StockAlreadyExistsException("Sorry, stock already exist in portfolio<br>");
+			}
 		}
 		else  //portfolio is full
 		{
-			System.out.println("Can’t add new stock, portfolio can have only "+MAX_PORTFOLIO_SIZE+" stocks");
+			
+			throw new PortfolioFullException("Portfolio is already full<br>");
+			
 		}
 	}
 	
 	
 	
-	public boolean removestock(String Symbol){ //removes specified stock from portfolio
-		
-		boolean check=this.sellstock(Symbol,-1,true); //sell that stock, true for remove it afterwards
-		if (check){  
-			return true; //success
+	public void removestock(String Symbol) throws StockNotExistException{ //removes specified stock from portfolio
+		int stocknumber=-1,i;
+		String Symbol1;
+		for (i = 0; i < this.portfolio_size; i++) { //finds if the stock is in the portfolio
+			Symbol1=this.stocks[i].getSymbol();
+			if (Symbol1.equals(Symbol)){
+				stocknumber=i;
+			}
+			
 		}
-		
-		else //failure
+		if (stocknumber>-1)
+		{ //stock found
+			this.balance=this.balance+(this.stocks[stocknumber].getBid()*this.stocks[stocknumber].getStockQuantity());
+			this.stocks[stocknumber].updateStockQuantity(this.stocks[stocknumber].getStockQuantity()*(-1));
+			//sell that stock
+		}
+		else //stock not found
 		{
-			System.out.println("The specified stock cannot be found");
-			return false;
+			throw new StockNotExistException("Stock by that symbol isn't in profile<br>");
 		}
+		
 }
 
 	
@@ -132,7 +159,7 @@ public class Portfolio { //a portfolio of up to 5 stocks
 	
 	
 	
-	public boolean sellstock(String Symbol,int amount,boolean remove){ //sells a stock from portfolio for the amount specified
+	public void sellstock(String Symbol,int amount) throws BalanceException, StockNotExistException{ //sells a stock from portfolio for the amount specified
 		int stocknumber=-1,i;
 		String Symbol1;
 		for (i = 0; i < this.portfolio_size; i++) { //finds if the stock is in the portfolio
@@ -144,43 +171,40 @@ public class Portfolio { //a portfolio of up to 5 stocks
 		}
 		if (stocknumber>(-1)) //stock was found 
 		{
-			if ((amount==-1) || (amount>this.stocks[stocknumber].getStockQuantity())) //if sum exceeds amount of current stock
+			if (amount>-2) //amount is applicable
 			{
-				
-				this.balance=this.balance+(this.stocks[stocknumber].getBid()*this.stocks[stocknumber].getStockQuantity());
-				this.stocks[stocknumber].updateStockQuantity(this.stocks[stocknumber].getStockQuantity()*(-1));
-				if (remove)
+				if (amount==(-1)) //selling all stock
 				{				
-					if (stocknumber<(this.portfolio_size-1)) //stock isn't last
+					this.balance=this.balance+(this.stocks[stocknumber].getBid()*this.stocks[stocknumber].getStockQuantity());
+					this.stocks[stocknumber].updateStockQuantity(this.stocks[stocknumber].getStockQuantity()*(-1));				
+				}				
+				else //only part of the stock amount was sold
+				{
+					if (amount<=this.stocks[stocknumber].getStockQuantity())
 					{
-						for (i = (stocknumber+1); i < stocks.length; i++) 	//cut back stocks 1 in place, last one is a duplicate						
-						{
-							this.stocks[i-1]=this.stocks[i];				
-						}										
-					}				
-					this.stocks[this.portfolio_size-1]=null; //remove last stock
-					this.portfolio_size--;
-				}
-		
+						this.balance=this.balance+(this.stocks[stocknumber].getBid()*amount);				
+						this.stocks[stocknumber].updateStockQuantity((-1)*amount);
+					}
+					else  //amount is higher than stock quantity
+					{
+						throw new BalanceException("amount is higher than quantity in stock<br>");
+					}
+				}						
 			}
-			else //only part of the stock amount was sold
+			else  //negative number entered
 			{
-				this.balance=this.balance+(this.stocks[stocknumber].getBid()*amount);
-				this.stocks[stocknumber].updateStockQuantity((-1)*amount);
+				throw new ArithmeticException("negative number given<br>");	
 			}
-			
-			return true; //success
 		}
-		else
+		else //stock not found
 		{
-			return false; //stock was not found, returning false for failure
-		}
-
+			throw new StockNotExistException("Stock by that symbol isn't in profile<br>");
+		}				
 	}
 	
 	
 	
-	public boolean buystock(String Symbol,int amount)  //buys a stock for the amount specified
+	public void buystock(String Symbol,int amount) throws BalanceException  , StockNotExistException//buys a stock for the amount specified
 	{
 		int stocknumber=-1,i;
 		String Symbol1;
@@ -194,23 +218,39 @@ public class Portfolio { //a portfolio of up to 5 stocks
 		}
 		if (stocknumber>(-1))
 		{
-			if ((amount<0) || ((amount*this.stocks[stocknumber].getAsk())>this.balance))
+			if (amount>-2)
 			{
-				int sum=((int) (balance/this.stocks[stocknumber].getAsk()));
-				this.stocks[stocknumber].updateStockQuantity(this.stocks[stocknumber].getStockQuantity()+(sum));
-				this.balance=this.balance-(sum*this.stocks[stocknumber].getAsk()) ;
+				if (amount==-1)
+				{
+					int sum=((int) (balance/this.stocks[stocknumber].getAsk()));
+					this.stocks[stocknumber].updateStockQuantity(this.stocks[stocknumber].getStockQuantity()+(sum));
+					this.balance=this.balance-(sum*this.stocks[stocknumber].getAsk()) ;
+				}
+				else
+				{				
+					if ((amount*this.stocks[stocknumber].getAsk())>this.balance)//balance is negative
+					{
+						throw new BalanceException("Portfolio balance will be negative<br>");
+					}
+					else //balance is fine
+					{
+						this.stocks[stocknumber].updateStockQuantity(amount);
+						this.balance=this.balance-amount*this.stocks[stocknumber].getAsk();
+					}
+				}
 			}
 			else
 			{
-				this.stocks[stocknumber].updateStockQuantity(amount);
-				this.balance=this.balance-amount*this.stocks[stocknumber].getAsk();
+				throw new ArithmeticException("negative number given<br>");				
 			}
-			return true;
+			
 		}
-		else
+		else //stock not found
 		{
-			return false;
+			throw new StockNotExistException("Stock by that symbol isn't in profile<br>");
 		}
+		
+
 		
 	}
 	
